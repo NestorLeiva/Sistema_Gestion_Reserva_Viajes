@@ -1,3 +1,5 @@
-# DOCUEMTOS 
-
+# Documentos de Google Docs
+*.gdoc
 *.google-docs
+tu-documento-google-docs.*
+docs/google-docs/
