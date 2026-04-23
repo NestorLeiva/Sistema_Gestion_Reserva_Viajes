@@ -1,0 +1,30 @@
+﻿@model IEnumerable<SistemaViajes.Models.Viaje>
+
+<div class="container mt-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Viajes Programados</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID Viaje</th>
+                        <th>Fecha de Salida</th>
+                        <th>Tarifa Base</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var v in Model)
+                    {
+                        <tr>
+                            <td>@v.PkIdViaje</td>
+                            <td>@v.FechaSalida.ToString("dd/MM/yyyy hh:mm tt")</td>
+                            <td class="text-success fw-bold">₡@v.Precio.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

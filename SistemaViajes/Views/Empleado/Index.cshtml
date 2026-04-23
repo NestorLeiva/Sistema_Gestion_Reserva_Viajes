@@ -1,0 +1,29 @@
+﻿@model IEnumerable<SistemaViajes.Models.Empleado>
+
+<div class="container mt-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-success text-white d-flex justify-content-between">
+            <h4 class="mb-0">Lista de Empleados</h4>
+            <a asp-action="Crear" class="btn btn-light btn-sm">Nuevo Empleado</a>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre Completo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.PkIdEmpleado</td>
+                            <td>@item.NombreCompleto</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
