@@ -3,3 +3,20 @@
 *.google-docs
 tu-documento-google-docs.*
 docs/google-docs/
+
+# --- Binarios y Temporales ---
+[Bb]in/
+[Oo]bj/
+.vs/
+
+# --- Archivos de Usuario ---
+*.user
+*.userosscache
+*.suo
+
+# --- Configuración Local ---
+appsettings.Development.json
+
+# --- Otros ---
+.DS_Store
+*.log
