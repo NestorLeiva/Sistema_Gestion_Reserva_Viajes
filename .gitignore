@@ -20,3 +20,4 @@ appsettings.Development.json
 # --- Otros ---
 .DS_Store
 *.log
+*.rar
