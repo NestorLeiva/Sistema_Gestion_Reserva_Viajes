@@ -7,11 +7,16 @@ namespace SistemaViajes.Controllers
     public class ViajeController : Controller
     {
         private readonly AppDbContext _contexto;
-        public ViajeController(AppDbContext contexto) { _contexto = contexto; }
+
+        public ViajeController(AppDbContext contexto)
+        {
+            _contexto = contexto;
+        }
 
         public IActionResult Index()
         {
-            var listaViajes = _contexto.Viajes.ToList();
+            // Usamos .VIAJE que es como se llama el DbSet en el AppDbContext
+            var listaViajes = _contexto.VIAJE.ToList();
             return View(listaViajes);
         }
     }

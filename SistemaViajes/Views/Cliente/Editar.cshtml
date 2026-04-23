@@ -1,0 +1,43 @@
+﻿@model SistemaViajes.Models.Cliente
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-warning text-dark d-flex justify-content-between">
+            <h4 class="mb-0">Modificar Datos del Cliente</h4>
+            <i class="fas fa-user-edit"></i>
+        </div>
+        <div class="card-body">
+            <form asp-action="Editar" method="post">
+                @* VITAL: Sin este ID oculto, el controlador no sabe qué registro editar *@
+                <input type="hidden" asp-for="PkIdCliente" />
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Cédula</label>
+                        <input asp-for="Cedula" class="form-control" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Nombre Completo</label>
+                        <input asp-for="NombreCompleto" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Teléfono</label>
+                        <input asp-for="Telefono" class="form-control" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Correo</label>
+                        <input asp-for="Correo" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="mt-4 border-top pt-3">
+                    <button type="submit" class="btn btn-primary px-4">Actualizar</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Volver al Listado</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

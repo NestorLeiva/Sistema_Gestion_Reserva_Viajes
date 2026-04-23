@@ -20,7 +20,9 @@
                         <tr>
                             <td>@v.PkIdViaje</td>
                             <td>@v.FechaSalida.ToString("dd/MM/yyyy hh:mm tt")</td>
-                            <td class="text-success fw-bold">₡@v.Precio.ToString("N2")</td>
+                            <td class="text-success fw-bold">
+                                ₡@(v.Precio.HasValue? v.Precio.Value.ToString("N2") : "0.00")
+                            </td>
                         </tr>
                     }
                 </tbody>

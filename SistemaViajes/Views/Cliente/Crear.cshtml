@@ -1,0 +1,33 @@
+﻿@model SistemaViajes.Models.Cliente
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4>Registrar Nuevo Cliente</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Crear" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Cédula</label>
+                    <input asp-for="Cedula" class="form-control" placeholder="Ej: 3-0XXX-0XXX" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nombre Completo</label>
+                    <input asp-for="NombreCompleto" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <input asp-for="Telefono" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Correo Electrónico</label>
+                    <input asp-for="Correo" type="email" class="form-control" />
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Guardar Cliente</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
