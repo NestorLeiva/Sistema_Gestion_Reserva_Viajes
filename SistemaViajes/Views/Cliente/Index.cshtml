@@ -1,0 +1,26 @@
+﻿@model IEnumerable<SistemaViajes.Models.Cliente>
+<div class="container mt-4">
+    <h2>Lista de Clientes</h2>
+    <a href="/Cliente/Crear" class="btn btn-success mb-3">Nuevo Cliente</a>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Cédula</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Cedula</td>
+                    <td>@item.NombreCompleto</td>
+                    <td>@item.Telefono</td>
+                    <td>@item.Correo</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

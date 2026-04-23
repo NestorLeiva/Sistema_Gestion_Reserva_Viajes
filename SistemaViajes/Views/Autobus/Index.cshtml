@@ -1,0 +1,45 @@
+﻿@model IEnumerable<SistemaViajes.Models.Autobus>
+
+@{
+    ViewData["Title"] = "Flota de Autobuses";
+}
+
+<div class="container mt-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-bus-front"></i> Control de Unidades</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Placa del Vehículo</th>
+                        <th>Capacidad</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bus in Model)
+                    {
+                        <tr>
+                            <td>@bus.PkIdAutobus</td>
+                            <td><span class="badge bg-info text-dark">@bus.Placa</span></td>
+                            <td>@bus.CapacidadAsientos Pasajeros</td>
+                            <td>
+                                @if (bus.CapacidadAsientos > 40)
+                                {
+                                    <span class="text-success fw-bold">Bus Grande</span>
+                                }
+                                else
+                                {
+                                    <span class="text-primary fw-bold">Microbús</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
