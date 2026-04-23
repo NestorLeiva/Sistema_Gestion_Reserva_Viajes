@@ -24,5 +24,16 @@ namespace SistemaViajes.Controllers
             ViewBag.Error = "Usuario o clave incorrectos";
             return View();
         }
+
+
+        public IActionResult Salir()
+        {
+            // Limpiamos la sesión para que el usuario salga del sistema
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "Acceso");
+        }
+
+
+
     }
 }

@@ -49,6 +49,16 @@ namespace SistemaViajes.Models
                 entity.Property(e => e.CapacidadAsientos).HasColumnName("CAPACIDAD_ASIENTOS");
                 entity.Property(e => e.FkTipoAutobus).HasColumnName("FK_TIPO_AUTOBUS");
             });
+
+            modelBuilder.Entity<Viaje>(entity => {
+                entity.HasKey(e => e.PkIdViaje);
+                entity.ToTable("VIAJE_PROGRAMADO"); // <-- Esto le dice a C# el nombre real de la tabla
+                entity.Property(e => e.PkIdViaje).HasColumnName("PK_ID_VIAJE");
+                entity.Property(e => e.FechaSalida).HasColumnName("FECHA_SALIDA");
+                entity.Property(e => e.Precio).HasColumnName("TARIFA_BASE");
+            });
+
+
         }
     }
 
@@ -89,10 +99,9 @@ namespace SistemaViajes.Models
     {
         [Key]
         public int PkIdViaje { get; set; }
-        public string Origen { get; set; } = null!;
-        public string Destino { get; set; } = null!;
+        
         public DateTime FechaSalida { get; set; }
-        public decimal Precio { get; set; }
+        public decimal Precio { get; set; } // Este se mapea a TARIFA_BASE arriba
     }
 
 
