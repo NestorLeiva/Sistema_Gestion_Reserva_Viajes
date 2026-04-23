@@ -26,17 +26,18 @@ namespace SistemaViajes.Controllers
         }
 
         [HttpPost]
+        [HttpPost]
         public IActionResult Crear(Cliente cliente)
         {
             if (cliente != null)
             {
-                // --- PARCHE PARA INTEGRIDAD DE BASE DE DATOS ---
-                // Mandamos IDs que existan en tus tablas maestras para que SQL no de error
-                cliente.FkProfesion = 1;
-                cliente.FkRango = 1;
+                // Si el usuario no eligió profesión o rango en la vista,
+                // le ponemos el ID 1 por defecto para que SQL no de error
+                if (cliente.FkProfesion == 0) cliente.FkProfesion = 1;
+                if (cliente.FkRango == 0) cliente.FkRango = 1;
 
                 _contexto.Clientes.Add(cliente);
-                _contexto.SaveChanges();
+                _contexto.SaveChanges(); // Aquí es donde te daba el error
                 return RedirectToAction("Index");
             }
             return View(cliente);

@@ -1,0 +1,43 @@
+﻿@model SistemaViajes.Models.Autobus
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-warning">
+            <h4 class="mb-0">Modificar Autobús</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Editar" method="post">
+                <input type="hidden" asp-for="PkIdAutobus" />
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Número de Placa</label>
+                    <input asp-for="Placa" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Tipo de Autobús (ID)</label>
+                    <input asp-for="FkTipoAutobus" class="form-control" type="number" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Capacidad de Asientos</label>
+                    <input asp-for="CapacidadAsientos" class="form-control" type="number" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Estado de la Unidad</label>
+                    <select asp-for="EstadoUnidad" class="form-select">
+                        <option value="DISPONIBLE">DISPONIBLE</option>
+                        <option value="EN_VIAJE">EN VIAJE</option>
+                        <option value="EN_MANTENIMIENTO">EN MANTENIMIENTO</option>
+                    </select>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaViajes.Models
@@ -16,17 +17,22 @@ namespace SistemaViajes.Models
         [Column("NOMBRE_COMPLETO")]
         public string NombreCompleto { get; set; } = null!;
 
-        [Column("TELEFONO")] // Si no lo tenés en SQL, borrá esta línea y la de la vista
+        [Column("TELEFONO")]
         public string? Telefono { get; set; }
 
-        [Column("CORREO")] // Si no lo tenés en SQL, borrá esta línea y la de la vista
+        [Column("CORREO")]
         public string? Correo { get; set; }
 
         [Column("FK_PROFESION")]
         public int FkProfesion { get; set; }
 
-
         [Column("FK_RANGO")]
         public int FkRango { get; set; }
+
+        [Column("FK_EMPRESA")]
+        public int? FkEmpresa { get; set; }
+
+        [Column("FECHA_REGISTRO")]
+        public DateTime FechaRegistro { get; set; } = DateTime.Now;
     }
 }

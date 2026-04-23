@@ -1,45 +1,59 @@
 ﻿@model IEnumerable<SistemaViajes.Models.Autobus>
 
-@{
-    ViewData["Title"] = "Flota de Autobuses";
-}
-
 <div class="container mt-4">
-    <div class="card shadow border-0">
-        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="bi bi-bus-front"></i> Control de Unidades</h5>
-        </div>
-        <div class="card-body">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Placa del Vehículo</th>
-                        <th>Capacidad</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var bus in Model)
-                    {
-                        <tr>
-                            <td>@bus.PkIdAutobus</td>
-                            <td><span class="badge bg-info text-dark">@bus.Placa</span></td>
-                            <td>@bus.CapacidadAsientos Pasajeros</td>
-                            <td>
-                                @if (bus.CapacidadAsientos > 40)
-                                {
-                                    <span class="text-success fw-bold">Bus Grande</span>
-                                }
-                                else
-                                {
-                                    <span class="text-primary fw-bold">Microbús</span>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Listado de Autobuses - CUC</h2>
+        <a asp-action="Crear" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Nuevo Autobús
+        </a>
     </div>
+
+    <table class="table table-hover table-bordered shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Placa</th>
+                <th>Capacidad</th>
+                <th>Estado Actual</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="fw-bold">@item.Placa</td>
+                    <td>@item.CapacidadAsientos asientos</td>
+                    <td>
+                        @if (item.EstadoUnidad == "EN_MANTENIMIENTO")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-tools"></i> En Mantenimiento
+                            </span>
+                        }
+                        else if (item.EstadoUnidad == "EN_VIAJE")
+                        {
+                            <span class="badge bg-primary">
+                                <i class="bi bi-bus-front"></i> En Viaje
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle"></i> Disponible
+                            </span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Editar" asp-route-id="@item.PkIdAutobus" class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                        <a asp-action="Eliminar" asp-route-id="@item.PkIdAutobus" class="btn btn-sm btn-danger"
+                           onclick="return confirm('¿Desea eliminar la unidad @item.Placa?')">
+                            <i class="bi bi-trash"></i> Borrar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

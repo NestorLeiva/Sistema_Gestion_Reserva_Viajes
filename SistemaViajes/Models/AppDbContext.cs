@@ -14,6 +14,9 @@ namespace SistemaViajes.Models
         // Lo dejamos como VIAJE para que coincida con tu controlador
         public DbSet<Viaje> VIAJE { get; set; }
         public DbSet<UsuarioSistema> UsuarioSistemas { get; set; }
+        // Estos son los que le faltan a tu AppDbContext:
+        public DbSet<Mantenimiento> Mantenimientos { get; set; }
+        public DbSet<ViajeProgramado> ViajesProgramados { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,13 +50,17 @@ namespace SistemaViajes.Models
                 entity.Property(e => e.NombreCompleto).HasColumnName("NOMBRE_COMPLETO");
             });
 
-            // CONFIGURACIÓN DE AUTOBUS
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Autobus>(entity =>
             {
                 entity.ToTable("AUTOBUS");
-                entity.HasKey(e => e.PkIdAutobus);
                 entity.Property(e => e.PkIdAutobus).HasColumnName("PK_ID_AUTOBUS");
                 entity.Property(e => e.Placa).HasColumnName("PLACA");
+                entity.Property(e => e.CapacidadAsientos).HasColumnName("CAPACIDAD_ASIENTOS");
+                entity.Property(e => e.FkTipoAutobus).HasColumnName("FK_TIPO_AUTOBUS");
+                entity.Property(e => e.EstadoUnidad).HasColumnName("ESTADO_UNIDAD");
+                entity.Property(e => e.Activo).HasColumnName("ACTIVO");
             });
 
             // CONFIGURACIÓN DE VIAJE (SIN "dbo" PARA EVITAR EL ERROR)

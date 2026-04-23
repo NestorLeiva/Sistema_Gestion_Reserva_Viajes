@@ -1,0 +1,33 @@
+﻿@model SistemaViajes.Models.Autobus
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4>Registrar Nuevo Autobús</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Crear" method="post">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Número de Placa</label>
+                    <input asp-for="Placa" class="form-control" placeholder="Ej: SJB-001" required />
+                </div>
+
+                @* IMPORTANTE: En tu script no hay 'Modelo', hay 'Tipo' (FK) *@
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Tipo de Autobús (ID)</label>
+                    <input asp-for="FkTipoAutobus" class="form-control" type="number" placeholder="1 = Premium, 2 = Regular" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Capacidad de Asientos</label>
+                    <input asp-for="CapacidadAsientos" type="number" class="form-control" required />
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Guardar Unidad</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

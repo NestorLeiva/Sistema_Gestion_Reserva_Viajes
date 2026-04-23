@@ -4,25 +4,82 @@ using System.Linq;
 
 namespace SistemaViajes.Controllers
 {
-    // Esta es la clase que controla todo lo relacionado con los Buses
     public class AutobusController : Controller
     {
         private readonly AppDbContext _contexto;
 
-        // Aquí conectamos la base de datos
         public AutobusController(AppDbContext contexto)
         {
             _contexto = contexto;
         }
 
-        // Este método es el que carga la página principal de buses
         public IActionResult Index()
         {
-            // Traemos la lista de buses desde la tabla de la base de datos
+            // Traemos los datos directamente. Sin lógica extra para que no se sobreescriban.
             var listaBuses = _contexto.Autobuses.ToList();
-
-            // Se la mandamos a la Vista (el HTML) para que la dibuje
             return View(listaBuses);
+        }
+
+        [HttpGet]
+        public IActionResult Crear() => View();
+
+        [HttpPost]
+        public IActionResult Crear(Autobus bus)
+        {
+            if (bus != null)
+            {
+                if (bus.FkTipoAutobus == 0) bus.FkTipoAutobus = 1;
+                bus.EstadoUnidad = "DISPONIBLE";
+                bus.Activo = true;
+
+                _contexto.Autobuses.Add(bus);
+                _contexto.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(bus);
+        }
+
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            var bus = _contexto.Autobuses.Find(id);
+            if (bus == null) return RedirectToAction("Index");
+            return View(bus);
+        }
+
+        [HttpPost]
+        public IActionResult Editar(Autobus bus)
+        {
+            if (bus != null)
+            {
+                var busEnDb = _contexto.Autobuses.Find(bus.PkIdAutobus);
+
+                if (busEnDb != null)
+                {
+                    busEnDb.Placa = bus.Placa;
+                    busEnDb.CapacidadAsientos = bus.CapacidadAsientos;
+                    busEnDb.FkTipoAutobus = bus.FkTipoAutobus;
+
+                    // IMPORTANTE: Aquí se guarda el valor del select de la pantalla amarilla
+                    busEnDb.EstadoUnidad = bus.EstadoUnidad;
+
+                    _contexto.SaveChanges();
+                }
+                // Después de guardar, obligamos a ir al Index para ver el cambio
+                return RedirectToAction("Index");
+            }
+            return View(bus);
+        }
+
+        public IActionResult Eliminar(int id)
+        {
+            var bus = _contexto.Autobuses.Find(id);
+            if (bus != null)
+            {
+                _contexto.Autobuses.Remove(bus);
+                _contexto.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
     }
 }
