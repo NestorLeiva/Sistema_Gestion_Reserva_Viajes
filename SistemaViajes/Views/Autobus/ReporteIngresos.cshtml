@@ -1,0 +1,52 @@
+﻿@model SistemaViajes.Models.IngresoReporteVM
+
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="bi bi-cash-coin text-success"></i> Reporte de Ingresos por Período</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="ReporteIngresos" method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Fecha Inicio</label>
+                    <input type="date" name="fechaInicio" class="form-control" value="@Model.FechaInicio.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fecha Fin</label>
+                    <input type="date" name="fechaFin" class="form-control" value="@Model.FechaFin.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i> Generar Reporte
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card bg-success text-white text-center p-3 shadow">
+                <h5>Total Facturado</h5>
+                <h2 class="fw-bold">₡ @Model.TotalFacturado.ToString("N2")</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-info text-white text-center p-3 shadow">
+                <h5>Cantidad de Viajes</h5>
+                <h2 class="fw-bold">@Model.CantidadViajes</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-white text-center p-3 shadow">
+                <h5>Promedio por Viaje</h5>
+                <h2 class="fw-bold">₡ @Model.PromedioPorViaje.ToString("N2")</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 text-end">
+        <button onclick="window.print()" class="btn btn-outline-secondary">
+            <i class="bi bi-printer"></i> Imprimir Reporte
+        </button>
+    </div>
+</div>

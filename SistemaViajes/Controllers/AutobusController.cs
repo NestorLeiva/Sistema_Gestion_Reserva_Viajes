@@ -182,7 +182,23 @@ namespace SistemaViajes.Controllers
             return View(reporte.ToList());
         }
 
+        public async Task<IActionResult> ReporteIngresos(DateTime? fechaInicio, DateTime? fechaFin)
+        {
+            // Por defecto, mostramos el último mes si no hay fechas
+            var inicio = fechaInicio ?? DateTime.Now.AddMonths(-1);
+            var fin = fechaFin ?? DateTime.Now;
 
+            // Llamamos al SP. Asegurate de que el nombre coincida con SQL
+            var resultado = await _contexto.Set<IngresoReporteVM>()
+                .FromSqlRaw("EXEC sp_reporte_ingresos {0}, {1}", inicio, fin)
+                .ToListAsync();
+
+            var reporte = resultado.FirstOrDefault() ?? new IngresoReporteVM();
+            reporte.FechaInicio = inicio;
+            reporte.FechaFin = fin;
+
+            return View(reporte);
+        }
 
     }
 }

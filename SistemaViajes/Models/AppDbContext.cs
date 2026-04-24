@@ -31,7 +31,7 @@ namespace SistemaViajes.Models
 
         public DbSet<AuditoriaReserva> AuditoriaReservas { get; set; }
 
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // CONFIGURACIÓN DE EMPLEADO
@@ -109,6 +109,10 @@ namespace SistemaViajes.Models
                 .ToTable(tb => tb.HasTrigger("tr_AuditoriaReservas"));
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<IngresoReporteVM>().HasNoKey().ToView(null);
+                base.OnModelCreating(modelBuilder);
+
 
         }
     }
