@@ -1,27 +1,73 @@
-﻿@model IEnumerable<SistemaViajes.Models.Viaje>
+﻿@model IEnumerable<SistemaViajes.Models.ViajeProgramado>
 
 <div class="container mt-4">
-    <div class="card shadow border-0">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Viajes Programados</h4>
-        </div>
-        <div class="card-body">
-            <table class="table table-hover">
-                <thead>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Gestión de Viajes Programados</h2>
+        <a asp-action="Crear" class="btn btn-primary">
+            <i class="bi bi-calendar-plus"></i> Programar Nuevo Viaje
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-dark">
                     <tr>
-                        <th>ID Viaje</th>
-                        <th>Fecha de Salida</th>
-                        <th>Tarifa Base</th>
+                        <th>Ruta</th>
+                        <th>Unidad (Placa)</th>
+                        <th>Chofer</th>
+                        <th>Fecha y Hora</th>
+                        <th>Tarifa</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var v in Model)
+                    @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@v.PkIdViaje</td>
-                            <td>@v.FechaSalida.ToString("dd/MM/yyyy hh:mm tt")</td>
-                            <td class="text-success fw-bold">
-                                ₡@(v.Precio.HasValue? v.Precio.Value.ToString("N2") : "0.00")
+                            <td>
+                                <span class="fw-bold">@item.FkRutaNavigation?.NombreRuta</span>
+                            </td>
+                            <td>
+                                <i class="bi bi-bus-front"></i> @item.FkAutobusNavigation?.Placa
+                            </td>
+                            <td>@item.FkChoferNavigation?.NombreCompleto</td>
+                            <td>@item.FechaSalida.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>₡@item.TarifaBase.ToString("N2")</td>
+                            <td>
+                                @if (item.EstadoViaje == "EN_VIAJE")
+                                {
+                                    <span class="badge bg-primary">
+                                        <i class="bi bi-play-circle"></i> En Viaje
+                                    </span>
+                                }
+                                else if (item.EstadoViaje == "PROGRAMADO")
+                                {
+                                    <span class="badge bg-info text-dark">
+                                        <i class="bi bi-clock"></i> Programado
+                                    </span>
+                                }
+                                else if (item.EstadoViaje == "COMPLETADO")
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-all"></i> Completado
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@item.EstadoViaje</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a asp-action="Editar" asp-route-id="@item.PkIdViaje" class="btn btn-sm btn-outline-warning">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Detalles" asp-route-id="@item.PkIdViaje" class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     }

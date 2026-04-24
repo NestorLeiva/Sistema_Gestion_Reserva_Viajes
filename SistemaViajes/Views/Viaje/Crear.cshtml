@@ -1,0 +1,77 @@
+﻿@model SistemaViajes.Models.ViajeProgramado
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-calendar-plus"></i> Programar Nuevo Viaje</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Crear" method="post">
+
+                        @* Selección de Ruta *@
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ruta de Destino</label>
+                            <select asp-for="FkRuta" class="form-select" asp-items="ViewBag.Rutas">
+                                <option value="">-- Seleccione una ruta --</option>
+                            </select>
+                            <span asp-validation-for="FkRuta" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            @* Selección de Autobús *@
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Unidad (Autobús)</label>
+                                <select asp-for="FkAutobus" class="form-select" asp-items="ViewBag.Buses">
+                                    <option value="">-- Seleccione placa --</option>
+                                </select>
+                            </div>
+
+                            @* Selección de Chofer *@
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Chofer Asignado</label>
+                                <select asp-for="FkChofer" class="form-select" asp-items="ViewBag.Choferes">
+                                    <option value="">-- Seleccione conductor --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            @* Fecha y Hora *@
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Fecha y Hora de Salida</label>
+                                <input asp-for="FechaSalida" type="datetime-local" class="form-control" />
+                            </div>
+
+                            @* Tarifa *@
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Tarifa Base (₡)</label>
+                                <input asp-for="TarifaBase" type="number" step="0.01" class="form-control" placeholder="0.00" />
+                            </div>
+                        </div>
+
+                        @* Campo oculto para el Fiscal (Valor por defecto 3 según tu script) *@
+                        <input type="hidden" asp-for="FkFiscal" value="3" />
+
+                        <hr />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-save"></i> Guardar Viaje
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Volver al Listado
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

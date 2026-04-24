@@ -8,7 +8,7 @@ namespace SistemaViajes.Models
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Empleado> Empleados { get; set; }
-        public DbSet<RolEmpleado> RolesEmpleados { get; set; }
+        public DbSet<RolEmpleado> RolEmpleados { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Autobus> Autobuses { get; set; }
         // Lo dejamos como VIAJE para que coincida con tu controlador
@@ -17,6 +17,7 @@ namespace SistemaViajes.Models
         // Estos son los que le faltan a tu AppDbContext:
         public DbSet<Mantenimiento> Mantenimientos { get; set; }
         public DbSet<ViajeProgramado> ViajesProgramados { get; set; }
+        public virtual DbSet<Ruta> Rutas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,0 +1,32 @@
+﻿@model SistemaViajes.Models.ViajeProgramado
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Detalles del Viaje</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Ruta:</strong> @Model.FkRutaNavigation?.NombreRuta</p>
+                    <p><strong>Autobús:</strong> @Model.FkAutobusNavigation?.Placa</p>
+                    <p><strong>Capacidad:</strong> @Model.FkAutobusNavigation?.CapacidadAsientos asientos</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Chofer:</strong> @Model.FkChoferNavigation?.NombreCompleto</p>
+                    <p><strong>Fecha Salida:</strong> @Model.FechaSalida.ToString("f")</p>
+                    <p>
+                        <strong>Estado:</strong>
+                        <span class="badge @(Model.EstadoViaje == "EN_VIAJE" ? "bg-primary" : "bg-secondary")">
+                            @Model.EstadoViaje
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <a asp-action="Editar" asp-route-id="@Model.PkIdViaje" class="btn btn-warning">Editar</a>
+            <a asp-action="Index" class="btn btn-secondary">Volver</a>
+        </div>
+    </div>
+</div>

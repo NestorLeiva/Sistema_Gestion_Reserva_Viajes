@@ -1,0 +1,83 @@
+﻿@model SistemaViajes.Models.ViajeProgramado
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0"><i class="bi bi-pencil-square"></i> Modificar Viaje #@Model.PkIdViaje</h4>
+                </div>
+                <div class="card-body">
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <form asp-action="Editar" method="post">
+                        @* CAMPOS OCULTOS: Vitales para que el Update funcione *@
+                        <input type="hidden" asp-for="PkIdViaje" />
+                        <input type="hidden" asp-for="FkFiscal" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ruta Seleccionada</label>
+                            <select asp-for="FkRuta" class="form-select" asp-items="ViewBag.Rutas">
+                                <option value="">-- Seleccione la Ruta --</option>
+                            </select>
+                            <span asp-validation-for="FkRuta" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Autobús (Placa)</label>
+                                <select asp-for="FkAutobus" class="form-select" asp-items="ViewBag.Buses">
+                                    <option value="">-- Seleccione Bus --</option>
+                                </select>
+                                <span asp-validation-for="FkAutobus" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Chofer Asignado</label>
+                                <select asp-for="FkChofer" class="form-select" asp-items="ViewBag.Choferes">
+                                    <option value="">-- Seleccione Chofer --</option>
+                                </select>
+                                <span asp-validation-for="FkChofer" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Estado del Viaje</label>
+                                <select asp-for="EstadoViaje" class="form-select">
+                                    <option value="PROGRAMADO">PROGRAMADO</option>
+                                    <option value="EN_VIAJE">EN VIAJE</option>
+                                    <option value="COMPLETADO">COMPLETADO</option>
+                                    <option value="CANCELADO">CANCELADO</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Tarifa Base (₡)</label>
+                                <input asp-for="TarifaBase" class="form-control" type="number" step="0.01" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Fecha y Hora de Salida</label>
+                            <input asp-for="FechaSalida" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="FechaSalida" class="text-danger"></span>
+                        </div>
+
+                        <hr />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-save"></i> Actualizar Viaje
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary px-4">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
