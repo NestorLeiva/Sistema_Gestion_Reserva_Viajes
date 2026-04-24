@@ -1,0 +1,52 @@
+﻿@model SistemaViajes.Models.ViajeProgramado
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card border-primary shadow mb-3">
+                <div class="card-header bg-primary text-white text-center">Información del Viaje</div>
+                <div class="card-body text-center">
+                    <h5 class="fw-bold">@Model.FkRutaNavigation.NombreRuta</h5>
+                    <p class="mb-1"><strong>Salida:</strong> @Model.FechaSalida.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p class="h4 text-primary">₡@Model.TarifaBase.ToString("N2")</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="bi bi-cash-stack"></i> Registrar Venta</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="ProcesarVenta" method="post">
+                        <input type="hidden" name="idViaje" value="@Model.PkIdViaje" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Cliente</label>
+                            <select name="idCliente" class="form-select" asp-items="ViewBag.Clientes" required>
+                                <option value="">-- Seleccione Cliente --</option>
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Asientos</label>
+                                <input type="number" name="cantidad" class="form-control" value="1" min="1" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Método de Pago</label>
+                                <select name="idMetodoPago" class="form-select" asp-items="ViewBag.Metodos" required></select>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-3">
+                            <button type="submit" class="btn btn-success btn-lg">Generar Factura</button>
+                            <a asp-controller="Viaje" asp-action="Index" class="btn btn-light">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

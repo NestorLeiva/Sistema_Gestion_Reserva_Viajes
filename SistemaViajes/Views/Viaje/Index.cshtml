@@ -11,7 +11,7 @@
     <div class="card shadow-sm">
         <div class="card-body p-0">
             <table class="table table-hover mb-0">
-                <thead class="table-dark">
+                <thead class="table-dark text-center">
                     <tr>
                         <th>Ruta</th>
                         <th>Unidad (Placa)</th>
@@ -19,47 +19,49 @@
                         <th>Fecha y Hora</th>
                         <th>Tarifa</th>
                         <th>Estado</th>
-                        <th class="text-center">Acciones</th>
+                        <th>Ventas</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>
+                            <td class="align-middle">
                                 <span class="fw-bold">@item.FkRutaNavigation?.NombreRuta</span>
                             </td>
-                            <td>
+                            <td class="align-middle">
                                 <i class="bi bi-bus-front"></i> @item.FkAutobusNavigation?.Placa
                             </td>
-                            <td>@item.FkChoferNavigation?.NombreCompleto</td>
-                            <td>@item.FechaSalida.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td>₡@item.TarifaBase.ToString("N2")</td>
-                            <td>
+                            <td class="align-middle">@item.FkChoferNavigation?.NombreCompleto</td>
+                            <td class="align-middle">@item.FechaSalida.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="align-middle">₡@item.TarifaBase.ToString("N2")</td>
+                            <td class="align-middle text-center">
                                 @if (item.EstadoViaje == "EN_VIAJE")
                                 {
-                                    <span class="badge bg-primary">
-                                        <i class="bi bi-play-circle"></i> En Viaje
-                                    </span>
+                                    <span class="badge bg-primary"><i class="bi bi-play-circle"></i> En Viaje</span>
                                 }
                                 else if (item.EstadoViaje == "PROGRAMADO")
                                 {
-                                    <span class="badge bg-info text-dark">
-                                        <i class="bi bi-clock"></i> Programado
-                                    </span>
+                                    <span class="badge bg-info text-dark"><i class="bi bi-clock"></i> Programado</span>
                                 }
                                 else if (item.EstadoViaje == "COMPLETADO")
                                 {
-                                    <span class="badge bg-success">
-                                        <i class="bi bi-check-all"></i> Completado
-                                    </span>
+                                    <span class="badge bg-success"><i class="bi bi-check-all"></i> Completado</span>
                                 }
                                 else
                                 {
                                     <span class="badge bg-secondary">@item.EstadoViaje</span>
                                 }
                             </td>
-                            <td class="text-center">
+
+                            <td class="text-center align-middle">
+                                <a asp-controller="Venta" asp-action="Vender" asp-route-id="@item.PkIdViaje" class="btn btn-sm btn-success">
+                                    <i class="bi bi-cart-plus"></i> Vender
+                                </a>
+                            </td>
+
+                            <td class="text-center align-middle">
                                 <div class="btn-group">
                                     <a asp-action="Editar" asp-route-id="@item.PkIdViaje" class="btn btn-sm btn-outline-warning">
                                         <i class="bi bi-pencil"></i>

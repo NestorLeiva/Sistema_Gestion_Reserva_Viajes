@@ -19,6 +19,14 @@ namespace SistemaViajes.Models
         public DbSet<ViajeProgramado> ViajesProgramados { get; set; }
         public virtual DbSet<Ruta> Rutas { get; set; }
 
+        // NUEVAS TABLAS: Agrega estas dos líneas para quitar los errores
+        public DbSet<Reservacion> Reservaciones { get; set; }
+        public DbSet<Factura> Facturas { get; set; }
+
+        // Si ocupas las de clientes y métodos de pago, agrégalas de una vez:
+
+        public DbSet<MetodoPago> MetodosPago { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // CONFIGURACIÓN DE EMPLEADO
