@@ -458,3 +458,113 @@ CHECK (ESTADO_VIAJE IN ('PROGRAMADO', 'EN_VIAJE', 'COMPLETADO', 'CANCELADO'));
 UPDATE VIAJE_PROGRAMADO SET ESTADO_VIAJE = 'EN_VIAJE' WHERE PK_ID_VIAJE IN (1, 2);
 
 
+-- nuevas tablas 
+
+-- Tabla de Bitácora según requerimiento
+CREATE TABLE AUDITORIA_RESERVAS (
+    PK_ID_AUDITORIA INT PRIMARY KEY IDENTITY(1,1),
+    TABLA_AFECTADA VARCHAR(50),
+    ACCION VARCHAR(20),
+    USUARIO VARCHAR(50) DEFAULT SYSTEM_USER,
+    FECHA DATETIME DEFAULT GETDATE()
+);
+GO
+
+-- Trigger de Auditoría para Reservaciones
+CREATE TRIGGER tr_AuditoriaReservas
+ON RESERVACION
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    DECLARE @accion VARCHAR(20) = 'INSERT';
+    IF EXISTS(SELECT * FROM deleted) AND EXISTS(SELECT * FROM inserted) SET @accion = 'UPDATE';
+    IF EXISTS(SELECT * FROM deleted) AND NOT EXISTS(SELECT * FROM inserted) SET @accion = 'DELETE';
+
+    INSERT INTO AUDITORIA_RESERVAS (TABLA_AFECTADA, ACCION)
+    VALUES ('RESERVACION', @accion);
+END;
+GO
+
+
+
+CREATE OR ALTER FUNCTION fn_tipo_cliente (@salario DECIMAL(10,2))
+RETURNS VARCHAR(20)
+AS
+BEGIN
+    RETURN CASE 
+        WHEN @salario > 1500000 THEN 'VIP'
+        WHEN @salario BETWEEN 500001 AND 1500000 THEN 'Regular'
+        ELSE 'Económico'
+    END;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE sp_crear_reservacion
+    @id_cliente INT,
+    @id_viaje INT,
+    @id_admin INT,
+    @cantidad INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        -- 1. Validar disponibilidad usando la función fn_asientos_disponibles
+        DECLARE @disponibles INT = dbo.fn_asientos_disponibles(@id_viaje);
+
+        IF @disponibles < @cantidad
+        BEGIN
+            RAISERROR('No hay suficientes asientos disponibles.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- 2. Insertar la reservación
+        INSERT INTO RESERVACION (FK_CLIENTE, FK_VIAJE, FK_ADMINISTRATIVO, CANTIDAD_ASIENTOS, ESTADO_RESERVA)
+        VALUES (@id_cliente, @id_viaje, @id_admin, @cantidad, 'PENDIENTE');
+
+        COMMIT TRANSACTION;
+        PRINT 'Reservación creada con éxito.';
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@ErrorMessage, 16, 1);
+    END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE sp_generar_factura
+    @id_reservacion INT,
+    @id_metodo_pago INT
+AS
+BEGIN
+    BEGIN TRY
+        DECLARE @tarifa DECIMAL(10,2), @asientos INT, @subtotal DECIMAL(10,2), @impuestos DECIMAL(10,2), @total DECIMAL(10,2);
+        DECLARE @num_factura VARCHAR(20) = 'FAC-' + CAST(NEXT VALUE FOR seq_NumeroFactura AS VARCHAR); -- Ocupas una secuencia o un random
+
+        -- Obtener datos del viaje y la reserva
+        SELECT @tarifa = V.TARIFA_BASE, @asientos = R.CANTIDAD_ASIENTOS
+        FROM RESERVACION R
+        INNER JOIN VIAJE_PROGRAMADO V ON R.FK_VIAJE = V.PK_ID_VIAJE
+        WHERE R.PK_ID_RESERVACION = @id_reservacion;
+
+        -- Cálculos
+        SET @subtotal = @tarifa * @asientos;
+        SET @impuestos = @subtotal * 0.13; -- IVA 13%
+        SET @total = @subtotal + @impuestos;
+
+        -- Insertar Factura
+        INSERT INTO FACTURA (NUMERO_FACTURA, FK_RESERVACION, FK_METODO_PAGO, SUBTOTAL, IMPUESTOS, MONTO_TOTAL)
+        VALUES (ISNULL(@num_factura, NEWID()), @id_reservacion, @id_metodo_pago, @subtotal, @impuestos, @total);
+
+        -- Actualizar estado de la reserva a PAGADA
+        UPDATE RESERVACION SET ESTADO_RESERVA = 'PAGADA' WHERE PK_ID_RESERVACION = @id_reservacion;
+
+        PRINT 'Factura generada exitosamente.';
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@ErrorMsg, 16, 1);
+    END CATCH
+END;
+GO
