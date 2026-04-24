@@ -1,0 +1,57 @@
+﻿@model SistemaViajes.Models.Empleado
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-warning text-dark text-center">
+                    <h5 class="mb-0"><i class="bi bi-pencil-square"></i> Modificar Colaborador</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Editar">
+                        <input type="hidden" asp-for="PkIdEmpleado" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Número de Cédula</label>
+                            <input asp-for="Cedula" class="form-control bg-light" readonly />
+                            <small class="text-muted">La cédula no se puede modificar.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nombre Completo</label>
+                            <input asp-for="NombreCompleto" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Puesto / Rol</label>
+                            <select asp-for="FkRol" class="form-select" asp-items="ViewBag.Roles"></select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Nombre de Usuario</label>
+                                <input type="text" name="NombreUsuario" class="form-control"
+                                       value="@Model.UsuarioSistemas?.FirstOrDefault()?.NombreUsuario" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Nueva Contraseña</label>
+                                <input type="password" name="Clave" class="form-control" placeholder="Dejar en blanco para no cambiar" />
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3 form-check form-switch">
+                            <input asp-for="Activo" class="form-check-input" type="checkbox">
+                            <label class="form-check-label">Empleado Activo</label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning shadow-sm">Actualizar Datos</button>
+                            <a asp-action="Index" class="btn btn-light border">Volver a la lista</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

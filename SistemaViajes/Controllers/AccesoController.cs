@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore; // IMPORTANTE: Necesario para el .Include()
 using SistemaViajes.Models;
 
 namespace SistemaViajes.Controllers
@@ -11,29 +12,36 @@ namespace SistemaViajes.Controllers
         public IActionResult Login() => View();
 
         [HttpPost]
-        public IActionResult Login(string usuario, string clave)
+        public async Task<IActionResult> Login(string usuario, string clave)
         {
-            var user = _context.UsuarioSistemas
-                .FirstOrDefault(u => u.NombreUsuario == usuario && u.ClaveHash == clave);
+            // Buscamos el usuario e incluimos la información del empleado asociado
+            var user = await _context.UsuarioSistemas
+                .Include(u => u.EmpleadoNavigation)
+                .FirstOrDefaultAsync(u => u.NombreUsuario == usuario && u.ClaveHash == clave);
 
             if (user != null)
             {
+                // VALIDACIÓN DE ESTADO ACTIVO
+                // Si el empleado existe y su estado es 'false' (Inactivo), bloqueamos el acceso
+                if (user.EmpleadoNavigation != null && !user.EmpleadoNavigation.Activo)
+                {
+                    ViewBag.Error = "Su cuenta está inactiva. Por favor, contacte al administrador.";
+                    return View();
+                }
+
+                // Si está activo, procedemos con la sesión
                 HttpContext.Session.SetString("User", user.NombreUsuario);
                 return RedirectToAction("Index", "Home");
             }
+
             ViewBag.Error = "Usuario o clave incorrectos";
             return View();
         }
 
-
         public IActionResult Salir()
         {
-            // Limpiamos la sesión para que el usuario salga del sistema
             HttpContext.Session.Clear();
             return RedirectToAction("Login", "Acceso");
         }
-
-
-
     }
 }

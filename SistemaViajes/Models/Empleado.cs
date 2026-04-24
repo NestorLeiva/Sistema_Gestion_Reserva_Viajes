@@ -27,5 +27,8 @@ namespace SistemaViajes.Models
         // Propiedad de navegación para jalar el nombre del puesto (ROL)
         [ForeignKey("FkRol")]
         public virtual RolEmpleado? RolNavigation { get; set; }
+
+        // Propiedad para conectar con la tabla de Usuarios
+        public virtual ICollection<UsuarioSistema> UsuarioSistemas { get; set; } = new List<UsuarioSistema>();
     }
 }

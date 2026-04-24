@@ -93,11 +93,10 @@ namespace SistemaViajes.Models
             // CONFIGURACIÓN DE USUARIO_SISTEMA
             modelBuilder.Entity<UsuarioSistema>(entity =>
             {
-                entity.ToTable("USUARIO_SISTEMA");
-                entity.HasKey(e => e.PkIdUsuario);
-                entity.Property(e => e.PkIdUsuario).HasColumnName("PK_ID_USUARIO");
-                entity.Property(e => e.NombreUsuario).HasColumnName("NOMBRE_USUARIO");
-                entity.Property(e => e.ClaveHash).HasColumnName("CLAVE_HASH");
+                entity.HasOne(d => d.EmpleadoNavigation)
+                      .WithMany(p => p.UsuarioSistemas)
+                      .HasForeignKey(d => d.FkEmpleado) // <--- ESTO corrige el error del nombre inválido
+                      .HasConstraintName("FK_USUARIO_EMPLEADO");
             });
 
             // Buscá la entidad Factura y agregá esto:
