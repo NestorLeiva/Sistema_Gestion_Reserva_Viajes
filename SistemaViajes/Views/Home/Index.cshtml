@@ -1,8 +1,108 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<SistemaViajes.Models.Autobus>
+@{
+    ViewData["Title"] = "Panel de Control";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1 class="display-5 fw-bold text-primary">Sistema de Viajes - CUC</h1>
+            <p class="lead text-secondary">Gestión operativa y control de flota | Cartago, Costa Rica.</p>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row text-center mb-5">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="display-4 fw-bold">@ViewBag.TotalViajes</h2>
+                    <p class="text-uppercase mb-0">Viajes Programados</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="display-4 fw-bold">@ViewBag.TotalClientes</h2>
+                    <p class="text-uppercase mb-0">Clientes Registrados</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-warning text-dark shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="display-4 fw-bold">@Model.Count()</h2>
+                    <p class="text-uppercase mb-0">Unidades en Taller</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card border-danger shadow-sm">
+                <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Unidades Fuera de Servicio</h5>
+                    <span class="badge bg-white text-danger">Atención Inmediata</span>
+                </div>
+                <div class="card-body">
+                    @if (!Model.Any())
+                    {
+                        <div class="text-center py-4">
+                            <i class="bi bi-check-circle text-success display-4"></i>
+                            <p class="text-muted mt-2">No hay unidades reportadas en mantenimiento actualmente.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Placa</th>
+                                        <th>Capacidad</th>
+                                        <th>Estado Actual</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var bus in Model)
+                                    {
+                                        <tr>
+                                            <td><span class="fw-bold text-dark">@bus.Placa</span></td>
+                                            <td>@bus.CapacidadAsientos px</td>
+                                            <td><span class="badge bg-danger">EN REVISIÓN</span></td>
+                                            <td>
+                                                <a asp-controller="Autobus" asp-action="PantallaReportes" class="btn btn-sm btn-outline-secondary">Ver Bitácora</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-body text-center py-4">
+                    <h5 class="fw-bold mb-3">Acceso Rápido</h5>
+                    <div class="d-grid gap-3">
+                        <a asp-controller="Autobus" asp-action="Index" class="btn btn-primary py-2">
+                            <i class="bi bi-bus-front"></i> Gestionar Flota
+                        </a>
+                        <a asp-controller="Autobus" asp-action="PantallaReportes" class="btn btn-dark py-2">
+                            <i class="bi bi-file-earmark-bar-graph"></i> Reporte de Auditoría
+                        </a>
+                        <div class="alert alert-warning mt-3 p-2 small">
+                            <i class="bi bi-info-circle"></i> Use el módulo de <strong>Autobuses</strong> para enviar unidades al taller.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

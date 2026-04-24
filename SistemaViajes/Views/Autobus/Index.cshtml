@@ -3,9 +3,15 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Listado de Autobuses - CUC</h2>
-        <a asp-action="Crear" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> Nuevo Autobús
-        </a>
+        <div class="d-flex gap-2">
+            <a asp-action="PantallaReportes" class="btn btn-primary">
+                <i class="bi bi-graph-up"></i> Ver Reportes de Auditoría
+            </a>
+
+            <a asp-action="Crear" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Nuevo Autobús
+            </a>
+        </div>
     </div>
 
     <table class="table table-hover table-bordered shadow-sm">
@@ -14,6 +20,7 @@
                 <th>Placa</th>
                 <th>Capacidad</th>
                 <th>Estado Actual</th>
+                <th>Gestión de Taller (Trigger)</th> @* Nueva columna *@
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -43,13 +50,41 @@
                             </span>
                         }
                     </td>
+
+                    @* Lógica para disparar el mantenimiento *@
+                    <td>
+                        @if (item.EstadoUnidad != "EN_MANTENIMIENTO")
+                        {
+                            <form asp-action="EnviarAMantenimiento" method="post" class="d-flex gap-1">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="idBus" value="@item.PkIdAutobus" />
+                                <select name="idTipoMantenimiento" class="form-select form-select-sm" style="width: 150px;">
+                                    <option value="1">Preventivo</option>
+                                    <option value="2">Correctivo</option>
+                                    <option value="3">Cambio de Aceite</option>
+                                    <option value="4">Frenos</option>
+                                    <option value="5">Llantas</option>
+                                    <option value="6">Motor</option>
+                                    <option value="15">Scanner General</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-outline-dark">
+                                    <i class="bi bi-gear-fill"></i> Taller
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted small italic">Unidad en reparación</span>
+                        }
+                    </td>
+
                     <td class="text-center">
                         <a asp-action="Editar" asp-route-id="@item.PkIdAutobus" class="btn btn-sm btn-warning">
-                            <i class="bi bi-pencil-square"></i> Editar
+                            <i class="bi bi-pencil-square"></i>
                         </a>
                         <a asp-action="Eliminar" asp-route-id="@item.PkIdAutobus" class="btn btn-sm btn-danger"
                            onclick="return confirm('¿Desea eliminar la unidad @item.Placa?')">
-                            <i class="bi bi-trash"></i> Borrar
+                            <i class="bi bi-trash"></i>
                         </a>
                     </td>
                 </tr>

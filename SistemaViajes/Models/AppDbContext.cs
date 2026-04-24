@@ -27,6 +27,11 @@ namespace SistemaViajes.Models
 
         public DbSet<MetodoPago> MetodosPago { get; set; }
 
+
+
+        public DbSet<AuditoriaReserva> AuditoriaReservas { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // CONFIGURACIÓN DE EMPLEADO
@@ -94,6 +99,17 @@ namespace SistemaViajes.Models
                 entity.Property(e => e.NombreUsuario).HasColumnName("NOMBRE_USUARIO");
                 entity.Property(e => e.ClaveHash).HasColumnName("CLAVE_HASH");
             });
+
+            // Buscá la entidad Factura y agregá esto:
+            modelBuilder.Entity<Factura>()
+                .ToTable(tb => tb.HasTrigger("tr_AuditoriaFacturas"));
+
+            // Si tenés triggers en Reservaciones también, agregalo de una vez:
+            modelBuilder.Entity<Reservacion>()
+                .ToTable(tb => tb.HasTrigger("tr_AuditoriaReservas"));
+
+            base.OnModelCreating(modelBuilder);
+
         }
     }
 }

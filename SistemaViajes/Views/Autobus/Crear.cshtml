@@ -3,31 +3,57 @@
 <div class="container mt-4">
     <div class="card shadow">
         <div class="card-header bg-success text-white">
-            <h4>Registrar Nuevo Autobús</h4>
+            <h4><i class="bi bi-bus-front"></i> Registrar Nuevo Autobús</h4>
         </div>
         <div class="card-body">
             <form asp-action="Crear" method="post">
+                @Html.AntiForgeryToken()
+
+                @* Resumen de errores por si la placa ya existe o falla el SQL *@
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
                 <div class="mb-3">
                     <label class="form-label fw-bold">Número de Placa</label>
                     <input asp-for="Placa" class="form-control" placeholder="Ej: SJB-001" required />
+                    <span asp-validation-for="Placa" class="text-danger"></span>
                 </div>
 
-                @* IMPORTANTE: En tu script no hay 'Modelo', hay 'Tipo' (FK) *@
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Tipo de Autobús (ID)</label>
-                    <input asp-for="FkTipoAutobus" class="form-control" type="number" placeholder="1 = Premium, 2 = Regular" required />
+                    <label class="form-label fw-bold">Tipo de Autobús (Categoría)</label>
+                    <select asp-for="FkTipoAutobus" class="form-select" required>
+                        <option value="">-- Seleccione Tipo --</option>
+                        <option value="1">Premium (Piso Alto)</option>
+                        <option value="2">Regular (Estándar)</option>
+                        <option value="3">Mini-Bus</option>
+                    </select>
+                    <span asp-validation-for="FkTipoAutobus" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Capacidad de Asientos</label>
-                    <input asp-for="CapacidadAsientos" type="number" class="form-control" required />
+                    <input asp-for="CapacidadAsientos" type="number" class="form-control" min="1" max="100" required />
+                    <span asp-validation-for="CapacidadAsientos" class="text-danger"></span>
                 </div>
 
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-primary">Guardar Unidad</button>
-                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                @* Campos ocultos que el controlador maneja automáticamente *@
+                <input type="hidden" asp-for="EstadoUnidad" value="DISPONIBLE" />
+                <input type="hidden" asp-for="Activo" value="true" />
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar Unidad
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Cancelar
+                    </a>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,25 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
 using SistemaViajes.Models;
-using System.Diagnostics;
+using System.Linq;
 
 namespace SistemaViajes.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly AppDbContext _contexto;
+
+        public HomeController(AppDbContext contexto)
+        {
+            _contexto = contexto;
+        }
+
         public IActionResult Index()
         {
-            return View();
-        }
+            // 1. Cargamos los buses en mantenimiento
+            var busesEnTaller = _contexto.Autobuses
+                .Where(b => b.EstadoUnidad == "EN_MANTENIMIENTO")
+                .ToList();
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            // 2. Usamos el nombre EXACTO que vimos en tu AppDbContext
+            //ViewBag.TotalViajes = _contexto.VIAJE.Count(); // 
+            ViewBag.TotalClientes = _contexto.Clientes.Count();
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(busesEnTaller);
         }
     }
 }
